@@ -1,5 +1,7 @@
 package dam.josantvarona.diccionario.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.annotations.OnDelete;
@@ -23,11 +25,11 @@ public class Definicion {
     @Column(name = "ejemplo", nullable = false)
     private String ejemplo;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "palabra_id", nullable = false)
-    private dam.josantvarona.diccionario.Models.Palabra palabra;
+    private Palabra palabra;
 
     public Integer getId() {
         return id;
@@ -53,13 +55,12 @@ public class Definicion {
         this.ejemplo = ejemplo;
     }
 
-    public dam.josantvarona.diccionario.Models.Palabra getPalabra() {
+    public Palabra getPalabra() {
         return palabra;
     }
 
-    public void setPalabra(dam.josantvarona.diccionario.Models.Palabra palabra) {
+    public void setPalabra(Palabra palabra) {
         this.palabra = palabra;
     }
-
 
 }

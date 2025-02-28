@@ -1,8 +1,11 @@
 package dam.josantvarona.diccionario.Controller;
 
 import dam.josantvarona.diccionario.Excepcions.RecordNotFoundException;
+import dam.josantvarona.diccionario.Models.Definicion;
 import dam.josantvarona.diccionario.Models.Palabra;
+import dam.josantvarona.diccionario.Services.DefinicionService;
 import dam.josantvarona.diccionario.Services.WordService;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,8 @@ import java.util.List;
 public class WoldController {
     @Autowired
     private WordService wordService;
+    @Autowired
+    private DefinicionService definicionService;
 
     @CrossOrigin
     @GetMapping
@@ -27,6 +32,7 @@ public class WoldController {
     @GetMapping("/{id}")
     public ResponseEntity<Palabra> getWordById(@PathVariable Long id) throws RecordNotFoundException {
         Palabra palabra = wordService.getWordById(id);
-        return new ResponseEntity<Palabra>(palabra, new HttpHeaders(), HttpStatus.OK);
+        //Hibernate.initialize(palabra.getDefinicions());
+        return new ResponseEntity<>(palabra, new HttpHeaders(), HttpStatus.OK);
     }
 }
