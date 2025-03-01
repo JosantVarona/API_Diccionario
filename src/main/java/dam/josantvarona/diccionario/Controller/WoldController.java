@@ -35,4 +35,28 @@ public class WoldController {
         //Hibernate.initialize(palabra.getDefinicions());
         return new ResponseEntity<>(palabra, new HttpHeaders(), HttpStatus.OK);
     }
+    @CrossOrigin
+    @PostMapping
+    public ResponseEntity<Palabra> addWord(@RequestBody Palabra palabra) {
+        Palabra abbWord = wordService.createWord(palabra);
+        return ResponseEntity.status(HttpStatus.CREATED).body(abbWord);
+    }
+    @CrossOrigin
+    @PutMapping("/{id}")
+    public ResponseEntity<Palabra> updateWord(@PathVariable Long id, @RequestBody Palabra palabra) throws RecordNotFoundException {
+        Palabra abbWord = wordService.updateWord(id, palabra);
+        return ResponseEntity.status(HttpStatus.OK).body(abbWord);
+    }
+    @CrossOrigin
+    @DeleteMapping("/{id}")
+    public HttpStatus deleteWord(@PathVariable Long id) throws RecordNotFoundException {
+        wordService.deleteWord(id);
+        return HttpStatus.ACCEPTED;
+    }
+    @CrossOrigin
+    @PostMapping("/{id}/definiciones")
+    public ResponseEntity<Definicion> addDefinicion(@PathVariable Long id, @RequestBody Definicion definicion) {
+        Definicion addDefini = definicionService.createDefinicion(id, definicion);
+        return ResponseEntity.status(HttpStatus.CREATED).body(addDefini);
+    }
 }

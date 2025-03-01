@@ -44,6 +44,38 @@ public class WordService {
             throw new RecordNotFoundException("No esta registrada la palabra",id);
         }
     }
+    public Palabra createWord(Palabra palabra) {
+        Palabra p = null;
+        if (palabra != null) {
+            p = palabra;
+            p = wordRepository.save(p);
+        }
+        return p;
+    }
+    public Palabra updateWord(Long id, Palabra palabra) throws RecordNotFoundException {
+        if (id != null) {
+            Optional<Palabra> aux = wordRepository.findById(id);
+            if (aux.isPresent()) {
+                Palabra wordUpdate = aux.get();
+                wordUpdate.setTermino(palabra.getTermino());
+                wordUpdate.setCategoriaGramatical(palabra.getCategoriaGramatical());
+                wordUpdate =wordRepository.save(wordUpdate);
+                return wordUpdate;
+            }else {
+                throw new RecordNotFoundException("No esta registrada la palabra",id);
+            }
+        }else {
+            throw new RecordNotFoundException("No esta registrada la palabra",id);
+        }
+    }
+    public void deleteWord(Long id) throws RecordNotFoundException {
+        Optional<Palabra> aux = wordRepository.findById(id);
+        if (aux.isPresent()) {
+            wordRepository.delete(aux.get());
+        }else {
+            throw new RecordNotFoundException("No esta registrada la palabra",id);
+        }
+    }
 }
 class WordLazy extends Palabra {
 
