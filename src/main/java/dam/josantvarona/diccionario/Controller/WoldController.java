@@ -1,5 +1,7 @@
 package dam.josantvarona.diccionario.Controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dam.josantvarona.diccionario.Excepcions.RecordNotFoundException;
 import dam.josantvarona.diccionario.Models.Definicion;
 import dam.josantvarona.diccionario.Models.Palabra;
@@ -13,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/palabras")
@@ -58,5 +61,19 @@ public class WoldController {
     public ResponseEntity<Definicion> addDefinicion(@PathVariable Long id, @RequestBody Definicion definicion) {
         Definicion addDefini = definicionService.createDefinicion(id, definicion);
         return ResponseEntity.status(HttpStatus.CREATED).body(addDefini);
+    }
+    @CrossOrigin
+    @PostMapping("/con-definiciones")
+    public ResponseEntity<?> addConDefinicion(@RequestBody Object palabraObj) {
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> palabraMap = (Map<String, Object>) palabraObj;
+
+        List<Map<String, String>> definicionesMap = (List<Map<String, String>>) palabraMap.get("definicions");
+
+        List<Definicion> definiciones = mapper.convertValue(definicionesMap, new TypeReference<List<Definicion>>(){});
+
+        Palabra palabra = mapper.convertValue(palabraObj, Palabra.class);
+        Palabra abbWord = wordService.createWorDefinition(palabra, definiciones);
+        return ResponseEntity.status(HttpStatus.CREATED).body(abbWord);
     }
 }

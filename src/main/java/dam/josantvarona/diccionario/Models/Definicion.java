@@ -63,4 +63,11 @@ public class Definicion {
         this.palabra = palabra;
     }
 
+    @Override
+    public String toString() {
+        return "Definicion{" +
+                "ejemplo='" + ejemplo + '\'' +
+                ", descripcion='" + descripcion + '\'' +
+                '}';
+    }
 }

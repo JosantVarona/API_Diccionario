@@ -8,6 +8,7 @@ import dam.josantvarona.diccionario.Models.Definicion;
 import dam.josantvarona.diccionario.Models.Palabra;
 
 
+import dam.josantvarona.diccionario.Repositories.DefinicionRepository;
 import dam.josantvarona.diccionario.Repositories.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,8 @@ import java.util.Optional;
 public class WordService {
     @Autowired
     private WordRepository wordRepository;
-
+    @Autowired
+    private DefinicionService DefinicionService;
 
     public List<Palabra> getAllWords() {
         List<Palabra> palabras = wordRepository.findAll();
@@ -49,9 +51,28 @@ public class WordService {
         if (palabra != null) {
             p = palabra;
             p = wordRepository.save(p);
+
         }
         return p;
     }
+    public Palabra createWorDefinition(Palabra palabra, List<Definicion> definicions) {
+        Palabra p = null;
+        if (palabra != null) {
+            p = wordRepository.save(palabra);
+
+            for (Definicion definicion : definicions) {
+                definicion.setPalabra(p);
+                System.out.println(definicion);
+                Long id = Long.valueOf(p.getId());
+                DefinicionService.createDefinicion(id,definicion);
+            }
+
+            p.setDefinicions(definicions);
+
+        }
+        return p;
+    }
+
     public Palabra updateWord(Long id, Palabra palabra) throws RecordNotFoundException {
         if (id != null) {
             Optional<Palabra> aux = wordRepository.findById(id);

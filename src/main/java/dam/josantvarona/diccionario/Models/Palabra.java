@@ -63,4 +63,24 @@ public class Palabra {
     public void setDefinicions(List<Definicion> definicions) {
         this.definicions = definicions;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder definicionesStr = new StringBuilder();
+        for (Definicion definicion : definicions) {
+            definicionesStr.append(definicion.toString()).append(", ");
+        }
+
+
+        if (definicionesStr.length() > 0) {
+            definicionesStr.setLength(definicionesStr.length() - 2);
+        }
+
+        return "Palabra{" +
+                "termino='" + termino + '\'' +
+                ", categoriaGramatical='" + categoriaGramatical + '\'' +
+                ", definiciones=[" + definicionesStr.toString() + "]" +
+                '}';
+    }
+
 }
