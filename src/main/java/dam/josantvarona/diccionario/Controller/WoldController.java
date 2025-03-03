@@ -32,6 +32,12 @@ public class WoldController {
         return new ResponseEntity<List<Palabra>>(list, new HttpHeaders(), HttpStatus.OK);
     }
     @CrossOrigin
+    @GetMapping("/definiciones")
+    public ResponseEntity<List<Palabra>> getWordsAndDefinicions() {
+        List<Palabra> list = wordService.getAllWordAndDefinicion();
+        return new ResponseEntity<List<Palabra>>(list, new HttpHeaders(), HttpStatus.OK);
+    }
+    @CrossOrigin
     @GetMapping("/{id}")
     public ResponseEntity<Palabra> getWordById(@PathVariable Long id) throws RecordNotFoundException {
         Palabra palabra = wordService.getWordById(id);
@@ -76,4 +82,17 @@ public class WoldController {
         Palabra abbWord = wordService.createWorDefinition(palabra, definiciones);
         return ResponseEntity.status(HttpStatus.CREATED).body(abbWord);
     }
+    @CrossOrigin
+    @GetMapping("/categoria/{categoria}")
+    public ResponseEntity<List<Palabra>> getPalabrasByCategoria(@PathVariable String categoria) {
+        List<Palabra> result = wordService.filterCategori(categoria);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+    @CrossOrigin
+    @GetMapping("/inicial/{letra}")
+    public ResponseEntity<List<Palabra>> getPalabrasByLetra(@PathVariable String letra) {
+        List<Palabra> result = wordService.filterChar(letra);
+        return new ResponseEntity<>(result, new HttpHeaders(), HttpStatus.OK);
+    }
+
 }

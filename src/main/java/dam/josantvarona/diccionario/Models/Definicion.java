@@ -66,8 +66,10 @@ public class Definicion {
     @Override
     public String toString() {
         return "Definicion{" +
-                "ejemplo='" + ejemplo + '\'' +
+                "id=" + id +
                 ", descripcion='" + descripcion + '\'' +
+                ", ejemplo='" + ejemplo + '\'' +
+                ", palabra=" + palabra +
                 '}';
     }
 }

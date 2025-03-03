@@ -9,9 +9,4 @@ import java.util.List;
 
 public interface DefinicionRepository extends JpaRepository<Definicion, Integer> {
 
-    @Query(
-            value = "SELECT * FROM definicion WHERE palabra_id = :palabraId",
-            nativeQuery = true
-    )
-    List<Definicion> findByPalabra(@Param("palabraId") Long palabra);
 }

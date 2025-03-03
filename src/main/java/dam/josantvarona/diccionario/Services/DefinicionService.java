@@ -8,8 +8,6 @@ import dam.josantvarona.diccionario.Repositories.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -19,14 +17,7 @@ public class DefinicionService {
     @Autowired
     private WordRepository wordRepository;
 
-    public List<Definicion> getDefinicionesByWord(Long word) {
-        List<Definicion> definiciones = definicionRepository.findByPalabra(word);
-        if (!definiciones.isEmpty()) {
-            return definiciones;
-        }else {
-            return new ArrayList<Definicion>();
-        }
-    }
+
     public Definicion createDefinicion(Long id, Definicion definicion) {
         Optional<Palabra> aux = wordRepository.findById(id);
         if (aux.isPresent()) {
@@ -45,6 +36,23 @@ public class DefinicionService {
             definicionRepository.delete(aux.get());
         }else {
             throw new RecordNotFoundException("Deficincion no encontrada por id",id);
+        }
+    }
+    public Definicion updateDefinicion(Long palabra, Integer id, Definicion definicion) {
+        if (id !=null){
+            Optional<Palabra> auxp = wordRepository.findById(palabra);
+            Optional<Definicion> aux = definicionRepository.findById(id);
+            if (aux.isPresent() && auxp.isPresent()) {
+                Definicion updateDefinicion = aux.get();
+                updateDefinicion.setDescripcion(definicion.getDescripcion());
+                updateDefinicion.setEjemplo(definicion.getEjemplo());
+                updateDefinicion = definicionRepository.save(updateDefinicion);
+                return updateDefinicion;
+            }else {
+                throw new RuntimeException("La palabra con ID " + id + " no existe.");
+            }
+        }else {
+            throw new RuntimeException("La palabra con ID " + id + " no existe.");
         }
     }
 }

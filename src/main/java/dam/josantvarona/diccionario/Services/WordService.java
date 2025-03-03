@@ -32,6 +32,23 @@ public class WordService {
             return new ArrayList<Palabra>();
         }
     }
+    public List<Palabra> getAllWordAndDefinicion() {
+        List<Palabra> palabras = wordRepository.findAll();
+        List<Palabra> wordLazies = new ArrayList<>();
+        if( palabras.size() > 0 ){
+            for (Palabra p : palabras) {
+                WordLazy wordLazy = new WordLazy();
+                wordLazy.setId(p.getId());
+                wordLazy.setTermino(p.getTermino());
+                wordLazy.setCategoriaGramatical(p.getCategoriaGramatical());
+                wordLazy.setDefinicions(p.getDefinicions());
+                wordLazies.add(wordLazy);
+            }
+            return wordLazies;
+        }else {
+            return new ArrayList<Palabra>();
+        }
+    }
     public Palabra getWordById(Long id) throws RecordNotFoundException {
         Optional<Palabra> palabra = wordRepository.findById(id);
         if (palabra.isPresent()) {
@@ -95,6 +112,26 @@ public class WordService {
             wordRepository.delete(aux.get());
         }else {
             throw new RecordNotFoundException("No esta registrada la palabra",id);
+        }
+    }
+    public List<Palabra> filterCategori(String categoria) {
+        if (categoria == null) return null;
+        List<Palabra> palabras = wordRepository.findByCategoriaGramatical(categoria);
+        if( palabras.size() > 0 ){
+            return palabras;
+        }else {
+            System.out.println("No hay palabras con esa categoria: "+categoria);
+            return new ArrayList<Palabra>();
+        }
+    }
+    public List<Palabra> filterChar (String letra){
+        if (letra == null) return null;
+        List<Palabra> palabras = wordRepository.findByTermino(letra);
+        if( palabras.size() > 0 ){
+            return palabras;
+        }else {
+            System.out.println("No hay palabras que empece con esa letra: "+letra);
+            return new ArrayList<Palabra>();
         }
     }
 }
