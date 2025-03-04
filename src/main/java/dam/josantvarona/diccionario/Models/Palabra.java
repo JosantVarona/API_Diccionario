@@ -1,12 +1,15 @@
 package dam.josantvarona.diccionario.Models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.*;
+import dam.josantvarona.diccionario.Excepcions.RecordNotFoundException;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.ArrayList;
+
+import java.util.List;
+
 
 @Entity
 @Table(name = "palabra")
@@ -26,9 +29,9 @@ public class Palabra {
     @Column(name = "categoria_gramatical", nullable = false, length = 50)
     private String categoriaGramatical;
 
-    @OneToMany(mappedBy = "palabra")
     @JsonIgnore
-    private Set<Definicion> definicions = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "palabra", fetch = FetchType.LAZY)
+    private List<Definicion> definicions = new ArrayList<>();
 
     public Integer getId() {
         return id;
@@ -54,13 +57,30 @@ public class Palabra {
         this.categoriaGramatical = categoriaGramatical;
     }
 
-    public Set<Definicion> getDefinicions() {
+    public List<Definicion> getDefinicions() {
         return definicions;
     }
-
-    public void setDefinicions(Set<Definicion> definicions) {
+    public void setDefinicions(List<Definicion> definicions) {
         this.definicions = definicions;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder definicionesStr = new StringBuilder();
+        for (Definicion definicion : definicions) {
+            definicionesStr.append(definicion.toString()).append(", ");
+        }
+
+
+        if (definicionesStr.length() > 0) {
+            definicionesStr.setLength(definicionesStr.length() - 2);
+        }
+
+        return "Palabra{" +
+                "termino='" + termino + '\'' +
+                ", categoriaGramatical='" + categoriaGramatical + '\'' +
+                ", definiciones=[" + definicionesStr.toString() + "]" +
+                '}';
+    }
 
 }
