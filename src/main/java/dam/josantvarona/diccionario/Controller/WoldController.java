@@ -7,7 +7,6 @@ import dam.josantvarona.diccionario.Models.Definicion;
 import dam.josantvarona.diccionario.Models.Palabra;
 import dam.josantvarona.diccionario.Services.DefinicionService;
 import dam.josantvarona.diccionario.Services.WordService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -36,6 +35,13 @@ public class WoldController {
     public ResponseEntity<List<Palabra>> getWordsAndDefinicions() {
         List<Palabra> list = wordService.getAllWordAndDefinicion();
         return new ResponseEntity<List<Palabra>>(list, new HttpHeaders(), HttpStatus.OK);
+    }
+    @CrossOrigin
+    @GetMapping("/{id}/definiciones")
+    public ResponseEntity<Palabra> getWordByIdDefini(@PathVariable Long id) throws RecordNotFoundException {
+        Palabra palabra = wordService.getWordByIdDefini(id);
+        //Hibernate.initialize(palabra.getDefinicions());
+        return new ResponseEntity<>(palabra, new HttpHeaders(), HttpStatus.OK);
     }
     @CrossOrigin
     @GetMapping("/{id}")

@@ -8,7 +8,6 @@ import dam.josantvarona.diccionario.Models.Definicion;
 import dam.josantvarona.diccionario.Models.Palabra;
 
 
-import dam.josantvarona.diccionario.Repositories.DefinicionRepository;
 import dam.josantvarona.diccionario.Repositories.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,7 +48,7 @@ public class WordService {
             return new ArrayList<Palabra>();
         }
     }
-    public Palabra getWordById(Long id) throws RecordNotFoundException {
+    public Palabra getWordByIdDefini(Long id) throws RecordNotFoundException {
         Optional<Palabra> palabra = wordRepository.findById(id);
         if (palabra.isPresent()) {
             Palabra p = palabra.get();
@@ -63,6 +62,17 @@ public class WordService {
             throw new RecordNotFoundException("No esta registrada la palabra",id);
         }
     }
+    public Palabra getWordById (Long id) throws RecordNotFoundException {
+        Optional<Palabra> palabra = wordRepository.findById(id);
+        if (palabra.isPresent()) {
+            Palabra p = palabra.get();
+            p = wordRepository.save(p);
+            return p;
+        }else {
+            throw new RecordNotFoundException("No esta registrada la palabra",id);
+        }
+    }
+
     public Palabra createWord(Palabra palabra) {
         Palabra p = null;
         if (palabra != null) {
@@ -83,7 +93,6 @@ public class WordService {
                 Long id = Long.valueOf(p.getId());
                 DefinicionService.createDefinicion(id,definicion);
             }
-
             p.setDefinicions(definicions);
 
         }
@@ -134,6 +143,7 @@ public class WordService {
             return new ArrayList<Palabra>();
         }
     }
+
 }
 class WordLazy extends Palabra {
 
